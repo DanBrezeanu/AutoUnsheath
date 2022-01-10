@@ -8,11 +8,6 @@ autoUnsheathFrame:RegisterEvent("ADDON_LOADED")
 autoUnsheathFrame:RegisterEvent("PLAYER_LOGIN")
 autoUnsheathFrame:RegisterEvent("PLAYER_LOGOUT")
 
-
-local f = CreateFrame("Frame", "YourFrameName", UIParent)
-f:SetSize(400, 400)
-f:SetPoint("CENTER")
-
 local rangedClasses = {"HUNTER", "ROGUE", "WARRIOR", "MAGE", "PRIEST", "WARLOCK"}
 
 SheathState = {
@@ -76,6 +71,17 @@ end
 
 
 local function unsheathUpdate()
+    if InCombatLockdown() then
+        return
+    end
+
+    local _, playerClass, _ = UnitClass("player");
+    if playerClass == "SHAMAN" or playerClass == "DRUID" then
+        if GetShapeshiftForm() ~= 0 then
+            return
+        end
+    end
+
     local unsheathId = determineUnsheathId()
 
     if (not UnitAffectingCombat('player')) then
