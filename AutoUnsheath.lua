@@ -9,12 +9,19 @@ autoUnsheathFrame:RegisterEvent("PLAYER_LOGIN")
 autoUnsheathFrame:RegisterEvent("PLAYER_LOGOUT")
 
 local rangedClasses = {"HUNTER", "ROGUE", "WARRIOR", "MAGE", "PRIEST", "WARLOCK"}
+local soundFileIds = {567395, 567430, 567456, 567473, 567498, 567506, 569839, 569842}
 
 SheathState = {
     NONE = 1,
     MELEE = 2,
     RANGED = 3,
 }
+
+local function muteSoundAction()
+    for _, id in ipairs(soundFileIds) do
+        MuteSoundFile(id)
+    end
+end
 
 local function initTable()
     if type(_G["AUTOUNSHEATH_CHAR"]) ~= "table" then
@@ -30,6 +37,8 @@ local function initTable()
     end
     if type(GAutoUnsheath.MUTE) ~= "boolean" then
         AutoUnsheath.MUTE = false
+    elseif GAutoUnsheath.MUTE then
+        muteSoundAction()
     end
 end
 
@@ -37,6 +46,8 @@ local function saveState()
     _G["AUTOUNSHEATH_CHAR"] = AutoUnsheath
     _G["AUTOUNSHEATH"] = GAutoUnsheath
 end
+
+
 
 local function delay(tick)
     local th = coroutine.running()
